@@ -15,5 +15,6 @@ int main(int argc,char *argv[])
     char a[]="\"";
     strcat(arg,a);
     system(arg);
+    system("git status");
     return 0;
 }
