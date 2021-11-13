@@ -1,25 +1,26 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
 using namespace std;
 int l[10010];
-int cmp(int a,int b)
+int cmp(int a, int b)
 {
-    return a>b;
+    return a > b;
 }
 int main()
 {
-    ios::sync_with_stdio(0);
-    int n,k;
-    cin>>n>>k;
+    // ios::sync_with_stdio(0);
+    int n, k;
+    cin >> n >> k;
     long long ans;
-    for(int i=1;i<=n;i++)
+    for (int i = 1; i <= n; i++)
     {
-        cin>>l[i];
+        cin >> l[i];
     }
-    sort(l+1,l+n+1,cmp);
-    for(int i=1;i<=k;i++)
+    sort(l + 1, l + n + 1, cmp);
+    for (int i = 1; i <= k; i++)
     {
-        ans+=l[i];
+        ans += l[i];
     }
-    cout<<ans<<endl;
+    cout << ans << endl;
     return 0;
 }
