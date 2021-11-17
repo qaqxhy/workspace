@@ -11,14 +11,14 @@ int main()
 {
     ios::sync_with_stdio(0);
 #ifndef LOCALJUDGE
-    freopen("ride.in","r",stdin);
-    freopen("ride.out","w",stdout);
+    freopen("ride.in", "r", stdin);
+    freopen("ride.out", "w", stdout);
 #endif
     cin >> (a + 1);
     cin >> (b + 1);
     int alen = strlen(a + 1);
     int blen = strlen(b + 1);
-    long long atmp = 0, btmp = 0;
+    long long atmp = 1, btmp = 1;
     for (int i = 1; i <= alen; i++)
     {
         atmp *= a[i] - 'A' + 1;
