@@ -7,7 +7,7 @@
         "type": "shell",
         "command": "clang++",
         "args": [
-          "-std=c++17",
+          "-std=c++11",
           "-stdlib=libc++",
           "-g",
           // 生成调试信息，GUN可使用该参数
@@ -15,9 +15,11 @@
           // file指正在打开的文件
           "-o",
           // 生成可执行文件
-          "${workspaceFolder}/run"
+          "${workspaceFolder}/run",
           // fileDirname指正在打开的文件所在的文件夹
           // fileBasenammeNoExtension指没有扩展名的文件，unix中可执行文件属于此类
+          "-D",
+          "LOCALJUDGE"
         ],
         "options": {
           "cwd": "${workspaceFolder}"
