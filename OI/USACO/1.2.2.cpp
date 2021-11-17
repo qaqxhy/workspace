@@ -10,10 +10,10 @@ char b[1010];
 int main()
 {
     ios::sync_with_stdio(0);
-    #ifndef LOCALJUDGE
-        freopen(".in","r",stdin);
-        freopen(".out","w",stdout);
-    #endif
+#ifndef LOCALJUDGE
+    freopen("ride.in","r",stdin);
+    freopen("ride.out","w",stdout);
+#endif
     cin >> (a + 1);
     cin >> (b + 1);
     int alen = strlen(a + 1);
