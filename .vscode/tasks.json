@@ -25,7 +25,8 @@
                 "-lwinmm",
                 "-lgdiplus",
                 "-lws2_32",
-                "-lWininet"
+                "-lWininet",
+                "-D LOCALJUDGE"
             ],
             "type": "shell",
             "group": {
