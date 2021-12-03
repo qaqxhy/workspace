@@ -26,6 +26,9 @@
                 "-lgdiplus",
                 "-lws2_32",
                 "-lWininet",
+                "-lglut32", //使用glut
+                "-lglu32",
+                "-lopengl32",
                 "-D LOCALJUDGE"
             ],
             "type": "shell",
