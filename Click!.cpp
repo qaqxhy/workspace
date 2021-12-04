@@ -72,7 +72,7 @@ LRESULT CALLBACK WndProc(
     HDC hdc;
     //必须被设置为静态变量
     static int iClick = 0;      //鼠标单击次数
-    static TCHAR szTextBuf[20]; //static 控件文本（缓冲区）
+    static TCHAR szTextBuf[100]; //static 控件文本（缓冲区）
     static HWND hStatic;        //static 控件句柄
     static HINSTANCE hInst;
     switch (message)
@@ -98,7 +98,7 @@ LRESULT CALLBACK WndProc(
         break;
     case WM_LBUTTONDOWN: //鼠标左键单击消息
         iClick++;
-        wsprintf(szTextBuf, TEXT("鼠标被单击%d次"), iClick);
+        wsprintf(szTextBuf, TEXT("Mouse Clicked %d time(s)"), iClick);
         SetWindowText(hStatic, szTextBuf);
         break;
     case WM_DESTROY:
