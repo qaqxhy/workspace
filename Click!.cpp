@@ -71,20 +71,20 @@ LRESULT CALLBACK WndProc(
     PAINTSTRUCT ps;
     HDC hdc;
     //必须被设置为静态变量
-    static int iClick = 0;      //鼠标单击次数
+    static int iClick = 0;       //鼠标单击次数
     static TCHAR szTextBuf[100]; //static 控件文本（缓冲区）
-    static HWND hStatic;        //static 控件句柄
+    static HWND hStatic;         //static 控件句柄
     static HINSTANCE hInst;
     switch (message)
     {
     case WM_CREATE:
         hStatic = CreateWindow(
-            TEXT("static"),      //静态文本框的类名
+            TEXT("static"), //静态文本框的类名
             TEXT("Click!"), //控件的文本
             WS_CHILD /*子窗口*/ | WS_VISIBLE /*创建时显示*/ /*| WS_BORDER 带边框*/ | SS_CENTER /*水平居中*/ | SS_CENTERIMAGE /*垂直居中*/,
-            0 /*X坐标*/, 
-            0 /*Y坐标*/, 
-            500 /*宽度*/, 
+            0 /*X坐标*/,
+            0 /*Y坐标*/,
+            500 /*宽度*/,
             300 /*高度*/,
             hWnd,     //父窗口句柄
             (HMENU)1, //为控件指定一个唯一标识符
