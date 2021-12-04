@@ -26,6 +26,7 @@
                 "-lgdiplus",
                 "-lws2_32",
                 "-lWininet",
+                "-Wno-unused-but-set-variable"
                 "-D LOCALJUDGE"
             ],
             "type": "shell",
