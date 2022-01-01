@@ -1,6 +1,6 @@
-#include <Windows.h>
+#include <windows.h>
 #include <stdio.h>
-
+#include <stdlib.h>
 // 可交互的控件ID
 #define ID_BtnSel 3301	 // 鼠标左右键按键选择
 #define ID_FuncSel 3302	 // 模拟方式选择
@@ -12,7 +12,7 @@
 // 热键ID
 #define HotKey 1011
 
-static HWND hFont; // 统一字体
+static HFONT hFont; // 统一字体
 
 static HWND hTip1;		  // 鼠标左右键选择文本
 static HWND hRadio_Left;  // 鼠标左键按钮
@@ -32,6 +32,7 @@ static HWND hBtn_UorE; // 锁定解锁按钮
 static HWND hSepLine; // 分割线
 static HWND hURL;	  // 超文本链接文本框
 
+HINSTANCE hInst;
 // 触发按键 1：左键 0：右键
 INT LeftorRight = 1;
 // 模拟点击方式 0：mouse_event 1：SendInput 2：WinIO
@@ -77,7 +78,7 @@ INT FlashConfig()
 	DWORD dwType = REG_DWORD;
 	DWORD dwSize = sizeof(INT);
 
-	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\ClickRun"), NULL, KEY_READ | KEY_WOW64_64KEY, &hKey) == ERROR_SUCCESS)
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("SOFTWARE\\ClickRun"), NULL, KEY_READ | KEY_WOW64_64KEY, &hKey) == ERROR_SUCCESS)
 	{
 
 		RegQueryValueEx(hKey, TEXT("LeftorRight"), NULL, &dwType, (LPBYTE)(&LeftorRight), &dwSize);
@@ -95,7 +96,8 @@ INT FlashConfig()
 		SendMessage(hRadio_Right, BM_SETCHECK, 1, 0);
 	}
 	SendMessage(hCombo_Func, CB_SETCURSEL, Func, 0);
-	SendMessage(hText_TL, WM_SETTEXT, NULL, _itow(dig_TL, str_TL, 10));
+	_itow(dig_TL, str_TL, 10);
+	SendMessage(hText_TL, WM_SETTEXT, NULL,(LPARAM)(str_TL));
 	SendMessage(hCombo_HK, CB_SETCURSEL, HK_Index, 0);
 
 	return 0;
@@ -109,7 +111,7 @@ INT SaveConfig()
 	DWORD dwSize = sizeof(INT);
 	DWORD dwDispositon = 0;
 
-	if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\ClickRun"), NULL, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS | KEY_WOW64_64KEY, NULL, &hKey, &dwDispositon) == ERROR_SUCCESS)
+	if (RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("SOFTWARE\\ClickRun"), NULL, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS | KEY_WOW64_64KEY, NULL, &hKey, &dwDispositon) == ERROR_SUCCESS)
 	{
 		RegSetValueEx(hKey, TEXT("LeftorRight"), NULL, dwType, (LPCBYTE)(&LeftorRight), dwSize);
 		RegSetValueEx(hKey, TEXT("Func"), NULL, dwType, (LPCBYTE)(&Func), dwSize);
@@ -206,18 +208,18 @@ LRESULT WINAPI CtlProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CREATE:
 		hFont = CreateFont(-14, -7, 0, 0, 400, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY, FF_DONTCARE, TEXT("微软雅黑"));
-		hTip1 = CreateWindow(TEXT("Static"), TEXT("按键选择："), WS_CHILD | WS_VISIBLE, 15, 10, 300, 100, hWnd, NULL, hWnd, 0);
-		hRadio_Left = CreateWindow(TEXT("Button"), TEXT("鼠标左键"), WS_CHILD | WS_VISIBLE | BS_LEFT | BS_AUTORADIOBUTTON, 60, 35, 80, 20, hWnd, (HMENU)ID_BtnSel, hWnd, 0);
-		hRadio_Right = CreateWindow(TEXT("Button"), TEXT("鼠标右键"), WS_CHILD | WS_VISIBLE | BS_LEFT | BS_AUTORADIOBUTTON, 200, 35, 80, 20, hWnd, (HMENU)ID_BtnSel, hWnd, 0);
-		hTip2 = CreateWindow(TEXT("Static"), TEXT("模拟方式选择："), WS_CHILD | WS_VISIBLE, 15, 60, 300, 100, hWnd, NULL, hWnd, 0);
-		hCombo_Func = CreateWindow(TEXT("ComboBox"), TEXT(""), CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE, 40, 85, 280, 100, hWnd, (HMENU)ID_FuncSel, hWnd, 0);
-		hTip3 = CreateWindow(TEXT("Static"), TEXT("时间间隔(ms)："), WS_CHILD | WS_VISIBLE, 15, 120, 300, 100, hWnd, NULL, hWnd, 0);
-		hText_TL = CreateWindow(TEXT("Edit"), TEXT("500"), ES_CENTER | WS_CHILD | WS_VISIBLE, 30, 145, 80, 25, hWnd, (HMENU)ID_TLSet, hWnd, 0);
-		hTip4 = CreateWindow(TEXT("Static"), TEXT("热键设置："), WS_CHILD | WS_VISIBLE, 210, 120, 300, 100, hWnd, NULL, hWnd, 0);
-		hCombo_HK = CreateWindow(TEXT("ComboBox"), TEXT(""), CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE, 225, 145, 80, 1000, hWnd, (HMENU)ID_HKSet, hWnd, 0);
-		hBtn_UorE = CreateWindow(TEXT("Button"), TEXT("锁定当前配置"), ES_CENTER | WS_CHILD | WS_VISIBLE, 25, 180, 290, 50, hWnd, (HMENU)ID_UorELock, hWnd, 0);
-		hSepLine = CreateWindow(TEXT("Static"), TEXT(""), SS_ETCHEDHORZ | WS_CHILD | WS_VISIBLE, 5, 240, 332, 10, hWnd, NULL, hWnd, 0);
-		hURL = CreateWindow(TEXT("Edit"), TEXT("软件主页：injectrl.github.io/ClickRun"), ES_READONLY | WM_NOTIFY | ES_CENTER | WS_CHILD | WS_VISIBLE, 23, 247, 300, 20, hWnd, (HMENU)ID_URL, hWnd, 0);
+		hTip1 = CreateWindow(TEXT("Static"), TEXT("按键选择："), WS_CHILD | WS_VISIBLE, 15, 10, 300, 100, hWnd, NULL, hInst, 0);
+		hRadio_Left = CreateWindow(TEXT("Button"), TEXT("鼠标左键"), WS_CHILD | WS_VISIBLE | BS_LEFT | BS_AUTORADIOBUTTON, 60, 35, 80, 20, hWnd, (HMENU)ID_BtnSel, hInst, 0);
+		hRadio_Right = CreateWindow(TEXT("Button"), TEXT("鼠标右键"), WS_CHILD | WS_VISIBLE | BS_LEFT | BS_AUTORADIOBUTTON, 200, 35, 80, 20, hWnd, (HMENU)ID_BtnSel, hInst, 0);
+		hTip2 = CreateWindow(TEXT("Static"), TEXT("模拟方式选择："), WS_CHILD | WS_VISIBLE, 15, 60, 300, 100, hWnd, NULL, hInst, 0);
+		hCombo_Func = CreateWindow(TEXT("ComboBox"), TEXT(""), CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE, 40, 85, 280, 100, hWnd, (HMENU)ID_FuncSel, hInst, 0);
+		hTip3 = CreateWindow(TEXT("Static"), TEXT("时间间隔(ms)："), WS_CHILD | WS_VISIBLE, 15, 120, 300, 100, hWnd, NULL, hInst, 0);
+		hText_TL = CreateWindow(TEXT("Edit"), TEXT("500"), ES_CENTER | WS_CHILD | WS_VISIBLE, 30, 145, 80, 25, hWnd, (HMENU)ID_TLSet, hInst, 0);
+		hTip4 = CreateWindow(TEXT("Static"), TEXT("热键设置："), WS_CHILD | WS_VISIBLE, 210, 120, 300, 100, hWnd, NULL, hInst, 0);
+		hCombo_HK = CreateWindow(TEXT("ComboBox"), TEXT(""), CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE, 225, 145, 80, 1000, hWnd, (HMENU)ID_HKSet, hInst, 0);
+		hBtn_UorE = CreateWindow(TEXT("Button"), TEXT("锁定当前配置"), ES_CENTER | WS_CHILD | WS_VISIBLE, 25, 180, 290, 50, hWnd, (HMENU)ID_UorELock, hInst, 0);
+		hSepLine = CreateWindow(TEXT("Static"), TEXT(""), SS_ETCHEDHORZ | WS_CHILD | WS_VISIBLE, 5, 240, 332, 10, hWnd, NULL, hInst, 0);
+		hURL = CreateWindow(TEXT("Edit"), TEXT("软件主页：injectrl.github.io/ClickRun"), ES_READONLY | WM_NOTIFY | ES_CENTER | WS_CHILD | WS_VISIBLE, 23, 247, 300, 20, hWnd, (HMENU)ID_URL, hInst, 0);
 
 		// 设置各控件字体
 		SendMessage(hTip1, WM_SETFONT, (WPARAM)hFont, NULL);
@@ -230,12 +232,12 @@ LRESULT WINAPI CtlProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		SendMessage(hBtn_UorE, WM_SETFONT, (WPARAM)hFont, NULL);
 		SendMessage(hURL, WM_SETFONT, (WPARAM)hFont, NULL);
 		// 向模拟方式ComboBox添加选项
-		SendMessage(hCombo_Func, CB_ADDSTRING, 0, TEXT("1 - mouse_event"));
-		SendMessage(hCombo_Func, CB_ADDSTRING, 0, TEXT("2 - SendInput"));
+		SendMessage(hCombo_Func, CB_ADDSTRING, 0, (LPARAM)TEXT("1 - mouse_event"));
+		SendMessage(hCombo_Func, CB_ADDSTRING, 0, (LPARAM)TEXT("2 - SendInput"));
 		// 向热键设置ComboBox添加选项
 		for (i = 0; i < 12; i++)
 		{
-			SendMessage(hCombo_HK, CB_ADDSTRING, 0, str_HKList[i]);
+			SendMessage(hCombo_HK, CB_ADDSTRING, 0, (LPARAM)str_HKList[i]);
 		}
 		FlashConfig();
 		break;
@@ -261,7 +263,7 @@ LRESULT WINAPI CtlProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				EnableWindow(hText_TL, TRUE);
 				EnableWindow(hCombo_HK, TRUE);
 				EnableWindow(hRadio_Left, TRUE);
-				SendMessage(hBtn_UorE, WM_SETTEXT, 0, TEXT("锁定当前配置"));
+				SendMessage(hBtn_UorE, WM_SETTEXT, 0, (LPARAM)TEXT("锁定当前配置"));
 			}
 			// 已经是解锁状态，尝试锁定
 			else
@@ -307,7 +309,7 @@ LRESULT WINAPI CtlProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				EnableWindow(hCombo_Func, FALSE);
 				EnableWindow(hText_TL, FALSE);
 				EnableWindow(hCombo_HK, FALSE);
-				SendMessage(hBtn_UorE, WM_SETTEXT, 0, TEXT("(配置已生效)解锁当前配置"));
+				SendMessage(hBtn_UorE, WM_SETTEXT, 0, (LPARAM)TEXT("(配置已生效)解锁当前配置"));
 				CfgLocked = TRUE; // 标记锁定
 				SaveConfig();
 			}
@@ -341,7 +343,7 @@ LRESULT WINAPI CtlProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
-INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, int nCmdShow)
 {
 	MSG msg;
 	WNDCLASSEX WC; // 窗体类
@@ -349,6 +351,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 	INT width = GetSystemMetrics(SM_CXSCREEN);
 	INT height = GetSystemMetrics(SM_CYSCREEN);
 
+	hInst = hInstance;
 	WC.cbSize = sizeof(WNDCLASSEX);
 	WC.style = CS_HREDRAW | CS_VREDRAW;
 	WC.lpfnWndProc = CtlProc;

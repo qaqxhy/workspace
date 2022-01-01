@@ -13,7 +13,7 @@
                 "-m64",
                 "-Wall",
                 "-static-libgcc",
-                "-fexec-charset=GBK",
+                "-fexec-charset=utf-8",
                 "-D__USE_MINGW_ANSI_STDIO",
                 "-lgraphics64",
                 "-luuid",
@@ -27,7 +27,8 @@
                 "-lws2_32",
                 "-lWininet",
                 "-Wno-unused-but-set-variable",
-                "-D LOCALJUDGE"
+                "-D LOCALJUDGE",
+                "-D UNICODE"
             ],
             "type": "shell",
             "group": {

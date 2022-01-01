@@ -34,7 +34,7 @@ int WINAPI WinMain(
     /*****第②步：创建窗口(并让窗口显示出来)*****/
     hwnd = CreateWindow(
         szClassName,         //窗口类的名字
-        TEXT("Welcome"),     //窗口标题（出现在标题栏）
+        TEXT("你好"),     //窗口标题（出现在标题栏）
         WS_OVERLAPPEDWINDOW, //窗口风格
         CW_USEDEFAULT,       //初始化时x轴的位置
         CW_USEDEFAULT,       //初始化时y轴的位置
@@ -101,7 +101,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         hdc = BeginPaint(hwnd, &ps);
         GetClientRect(hwnd, &rect);
         //todo:
-        DrawText(hdc, TEXT("Click!"), -1, &rect, DT_VCENTER | DT_SINGLELINE | DT_CENTER);
+        DrawText(hdc, TEXT("点击!"), -1, &rect, DT_VCENTER | DT_SINGLELINE | DT_CENTER);
         EndPaint(hwnd, &ps);
         return 0;
     }
