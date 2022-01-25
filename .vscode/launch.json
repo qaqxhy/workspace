@@ -3,27 +3,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "edge",
-            "request": "launch",
-            "name": "Launch edge against localhost",
-            "url": "http://localhost",
-            "webRoot": "${workspaceRoot}"
-        },
-        {
-            "type": "edge",
-            "request": "attach",
-            "name": "Attach to edge",
-            "port": 80,
-            "webRoot": "${workspaceRoot}"
-        },
-        {
-            "name": "Launch index.html (disable sourcemaps)",
-            "type": "edge",
-            "request": "launch",
-            "sourceMaps": false,
-            "file": "${workspaceRoot}/index.html"  //#每次需要修改这里的文件地址
-        },
-        {
             "name": "(Windows) 启动",
             "type": "cppvsdbg",
             "request": "launch",
