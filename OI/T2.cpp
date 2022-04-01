@@ -1,40 +1,69 @@
-#include<bits/stdc++.h>
+// t2
+#include <bits/stdc++.h>
 using namespace std;
-int g,y;
-char ans[6][6];
-char ges[6][6];
-int gbu[30];
-int abu[30];
+int n;
+int G[1919];
+int cg;
+int L[1919];
+int cl;
+int cmp(int x, int y)
+{
+    return x > y;
+}
 int main()
 {
-    for(int i=1;i<=3;i++)
+    scanf("%d", &n);
+    for (int i = 1; i <= n; i++)
     {
-        scanf("%s",ans[i]+1);
-    }
-    for(int i=1;i<=3;i++)
-    {
-        scanf("%s",ges[i]+1);
-    }
-    for(int i=1;i<=3;i++)
-    {
-        for(int j=1;j<=3;j++)
+        char tmp;
+        cin >> tmp;
+        if (tmp == 'G')
         {
-            abu[ans[i][j]-'A'+1]++;
-            gbu[ges[i][j]-'A'+1]++;
-            if(ans[i][j]==ges[i][j])
+            int tp;
+            scanf("%d", &tp);
+            G[cg++] = tp;
+        }
+        else
+        {
+            int tp;
+            scanf("%d", &tp);
+            L[cl++] = tp;
+        }
+    }
+    sort(G, G + cg);
+    sort(L, L + cl);
+
+/*    for (int i = 0; i <= n; i++)
+    {
+        cout << G[i] << " ";
+    }
+    cout << endl;
+    for (int i = 0; i <= n; i++)
+    {
+        cout << L[i] << " ";
+    }
+    cout << endl;*/
+    int min = cg + cl;
+    int temp = 0;
+    int idxG = 0;
+    for (int ii = 0; ii < cl; ii++)
+    {
+        temp = ii+cg-idxG;
+        for (int jj = idxG; jj < cg; jj++)
+        {
+            if (G[jj] <= L[ii])
             {
-                g++;
-                abu[ans[i][j]-'A'+1]--;
-                gbu[ges[i][j]-'A'+1]--;
+                temp--;
+            }
+            else{
+                idxG = jj;
+                break;
             }
         }
-    }
-    for(int i=1;i<26;i++)
-    {
-        if(abu[i]&&gbu[i])
-        {
-            y+=min(gbu[i],abu[i]);
+        if(temp<min){
+            min=temp;
         }
     }
-    printf("%d\n%d",g,y);
+
+    cout << min;
 }

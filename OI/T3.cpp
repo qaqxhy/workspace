@@ -1,37 +1,72 @@
 #include<bits/stdc++.h>
 using namespace std;
-int t;
-int main()
-{
-    scanf("%d",&t);
-    while(t--)
-    {
-        int a[6]={0};
-        int b[6]={0};
-        for(int i=1;i<=4;i++)
-        {
-            scanf("%d",&a[i]);
+int n;
+int a[101];
+int k;
+int recipe[101][101];
+int result=0;
+
+bool check_recipts(int metal){
+    bool tag = true;
+    if(a[metal]>0){
+        a[metal]--;
+    }
+    else{
+        if(recipe[metal][0]==0){
+            tag = false;
         }
-        for(int i=1;i<=4;i++)
-        {
-            scanf("%d",&b[i]);
-        }
-        int win=0;
-        for(int i=1;i<=4;i++)
-        {
-            for(int j=1;j<=4;j++)
-            {
-                if(a[i]>b[j])
-                {
-                    win++;
-                }
+        for(int ii=1;ii<=recipe[metal][0];ii++){
+            if(check_recipts(recipe[metal][ii])==false){
+                tag = false;
+                break;
             }
         }
-        if(win==16||win==0)
-        {
-            printf("no\n");
-        }
-        else
-            printf("yes\n");
     }
+    return tag;
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=1;i<=n;i++)
+    {
+        cin>>a[i];
+        // cout<<a[i];
+    }
+    cin>>k;
+    // cout<<k;
+    for(int i=1;i<=k;i++)
+    {
+        int tmp;
+        cin>>tmp;
+        cin>>recipe[tmp][0];
+        for(int j=1;j<=recipe[tmp][0];j++)
+        {
+            cin>>recipe[tmp][j];
+        }
+    }
+
+/*     cout<<n<<endl;
+     for(int i=1;i<=n;i++)
+     {
+         // cin>>a[i];
+         cout<<a[i]<<" ";
+     }
+     cout << endl;
+     for(int i=1;i<=n;i++)
+     {
+         cout<<recipe[i][0]<<" ";
+         for(int j=1;j<=n;j++)
+         {
+             cout<<recipe[i][j]<<" ";
+         }
+        cout<<endl;
+     }*/
+
+    while(check_recipts(n)){
+        result++;
+    }
+    cout<<result<<endl;
+
+
 }
