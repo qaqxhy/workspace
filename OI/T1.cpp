@@ -2,7 +2,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 int n;
-char a[114510];
+char a[114514];
 int num = 0;
 bool temp=true;
 int main()
