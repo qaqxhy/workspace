@@ -23,7 +23,7 @@ int main()
             m/=i;
         }
     }
-    double ans=n/m;
+    double ans=(double)n/(double)m;
     cout<<ans;
     return 0;
 }
