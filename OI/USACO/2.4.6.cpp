@@ -24,6 +24,10 @@ int main()
         }
     }
     double ans=(double)n/(double)m;
-    cout<<ans;
+
+    if(ceil(ans)==ans)
+    {
+        cout<<ans<<".0";
+    }
     return 0;
 }
