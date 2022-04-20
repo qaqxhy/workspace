@@ -6,6 +6,8 @@ TASK:fracdec
 #include <bits/stdc++.h>
 using namespace std;
 int n,m;
+int dec[114514];
+int decnt=0;
 int main()
 {
     ios::sync_with_stdio(0);
@@ -24,10 +26,24 @@ int main()
         }
     }
     double ans=(double)n/(double)m;
-
     if(ceil(ans)==ans)
     {
         cout<<ans<<".0";
+        return 0;
+    }
+    int in=ans;
+    ans-=in;
+    while(ans!=0)
+    {
+        ans*=10;
+        ::dec[++decnt]=ans;
+        int tmp=ans;
+        ans-=tmp;
+    }
+    cout<<in<<endl<<decnt<<endl;
+    for(int i=1;i<=decnt;i++)
+    {
+        cout<<::dec[i];
     }
     return 0;
 }
